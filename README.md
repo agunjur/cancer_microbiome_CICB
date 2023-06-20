@@ -1,6 +1,7 @@
 # cancer_microbiome_CICB
 
 Code for paper *Strain-resolved gut microbial signatures outperform clinical predictors of response to combination anti-PD-1 plus anti-CTLA-4 blockade across diverse rare cancers*
+
 The scripts provided are intended to be used with the file "supp_tables.xlsx" included with the manuscript, which should be placed in this directory. They will allow you to understand and replicate the supervised machine learning analysis of pre-processed (centred-log-ratio transformed) gut microbiota abundances, as well as associated clinical metdata.
 
 Specifically:
