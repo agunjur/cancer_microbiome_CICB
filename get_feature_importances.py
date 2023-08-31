@@ -32,7 +32,7 @@ feats = '^t__'
 target = 'R_vs_P'
 
 # load data
-df=pd.read_excel("supp_tables.xlsx", sheet_name = "1. metadata_and_clr_abundances")
+df=pd.read_excel("supp_tables.xlsx", sheet_name = "metadata_and_clr_abundances")
 
 train = df.filter(regex='%s|%s' % (feats, target), axis =1).dropna()
 X = train.filter(regex='%s'% (feats), axis = 1)
