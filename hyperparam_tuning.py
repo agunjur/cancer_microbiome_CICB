@@ -39,7 +39,7 @@ target = "R_vs_P"
 # ------------------
 
 # import data
-df=pd.read_csv("supp_tables.xlsx", sheet_name = "1. metadata_and_clr_abundances")
+df=pd.read_csv("supp_tables.xlsx", sheet_name = "metadata_and_clr_abundances")
 
 # if using a subset of top strains, this needs to be defined
 if K != "all":
