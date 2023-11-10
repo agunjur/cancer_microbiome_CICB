@@ -1,8 +1,8 @@
 # cancer_microbiome_CICB
 
-Code for paper *Strain-resolved gut microbial signatures outperform clinical predictors of response to combination anti-PD-1 plus anti-CTLA-4 blockade across diverse rare cancers*
+Code for paper *A gut microbial signature for combination immune checkpoint blockade across cancer types*
 
-The scripts provided are intended to be used with the file "supp_tables.xlsx" included with the manuscript, which should be placed in this directory. They will allow you to understand and replicate the supervised machine learning analysis of pre-processed (centred-log-ratio transformed) gut microbiota abundances, as well as associated clinical metdata.
+The scripts provided are intended to be used with the file "supp_tables_v2.xlsx" included with the manuscript, which should be placed in this directory. They will allow you to understand and replicate the supervised machine learning analysis of pre-processed (centred-log-ratio transformed) gut microbiota abundances, as well as associated clinical metdata.
 
 Specifically:
 - *create_parameter_list.py* should be run first, to create a list of feature sets to iterate over. The 'K' parameter can be modified to an integer, which will select the top K strains (features starting with t__ must be selected).
