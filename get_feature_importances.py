@@ -32,14 +32,14 @@ feats = '^t__'
 target = 'R_vs_P'
 
 # load data
-df=pd.read_excel("supp_tables.xlsx", sheet_name = "metadata_and_clr_abundances")
+df=pd.read_excel("supp_tables_v2.xlsx", sheet_name = "metadata_and_clr_abundances")
 
 train = df.filter(regex='%s|%s' % (feats, target), axis =1).dropna()
 X = train.filter(regex='%s'% (feats), axis = 1)
 y = train[target].astype('bool').values
 
 # load hyperparams (from concatenating results of hyperparam_tuning.py, or pre-made in supp_tables.xlsx)
-hp_all = pd.read_excel("supp_tables.xlsx", sheet_name = "3. hyperparam_tuning_all")
+hp_all = pd.read_excel("supp_tables_v2.xlsx", sheet_name = "hyperparam_tuning_all")
 string = hp_all[hp_all['feats']=='^t__']['params'].reset_index(drop=True)
 hp = ast.literal_eval(string[0])
 
