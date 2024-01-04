@@ -1,11 +1,14 @@
 # cancer_microbiome_CICB
 
-Code for paper *A gut microbial signature for combination immune checkpoint blockade across cancer types*
+Machine learning code for paper *A gut microbial signature for combination immune checkpoint blockade across cancer types*.
 
-The scripts provided are intended to be used with the file "supp_tables_v2.xlsx" included with the manuscript, which should be placed in this directory. They will allow you to understand and replicate the supervised machine learning analysis of pre-processed (centred-log-ratio transformed) gut microbiota abundances, as well as associated clinical metdata.
+These scripts provided are intended to be used with the file "Supp_tables.xlsx" included with the manuscript, which should be placed in this directory. They will allow you to understand and replicate the supervised machine learning analysis of the CA209-538 cohort microbiome + clinical data (relevant to Figure 2 and 3 of the manuscript).
 
 Specifically:
-- *create_parameter_list.py* should be run first, to create a list of feature sets to iterate over. The 'K' parameter can be modified to an integer, which will select the top K strains (features starting with t__ must be selected).
-- *hyperparam_tuning.py* should be run as an array-job on a high-performance compute cluster, to iterate over the list made by "create_parameter_list.py", and create a list of csv files with relevant scores for the top performing hyperparameters for each feature set, that can then be concatenated into a single csv file. By default, this will reproduce the provided supp. table sheet "3. hyperparam_tuning_all". 
-To reproduce the supp. table sheet "4. hyperaparm_tuning_top22", the * *create_parameter_list.py* * script should be edited to have feats = "^t__", and K = 22.
-- *figure_two.ipynb* is a juypter notebook to create the subset histology group receiver operating characteristic curve figure panels (Figure 2C and an optional figure of out-of-bag cross-validation on subset)
+- *create_parameter_list.ipynb* is a jupyter notebook that should be run first, to create the file "parameter_list.csv". It lists all combinations of 'feats' (the feature sets to be selected for model training and testing, denoted by the prefix (e.g. "t__" denotes strain-level clr-abundances)), 'target' (the target binary variable, e.g. 'R_vs_PD') and 'K' (either 'all' for all features, or an integer to select the top K strains based on the pre-defined 'strain_importance' supplementary table sheet; only to be used if feats = "^t__").
+
+- *hyperparam_tuning.py* is a python script ideally run as an array-job on a high-performance compute cluster. It iterates over 'parameter_list.csv', selects relevant features and target, and performs 1000 randomly-selected iterations of 20-repeat stratified 5-fold cross validation over a large hyperparameter space. A csv file of the best hyperparameters (based on AUC score), and the cross-validation scores (mean, standard deviation, and each score for the 100-folds) is output for each feature-K combination, that can be concatenated to reproduce supp. table sheet "hyperparam_tuning_all".
+
+- *figure_two.ipynb* is a juypter notebook to create ROC curves across histology cohort subgroups, either using leave-one-group-out cross-validation (Figure 2C), or out-of-bag predictions.
+
+- *get_feature_importances.py* is a python script to determine the TreeSHAP feature importances of a tuned classifier trained on the whole CA209-538 cohort, using the specified features and target variable (default feats = '^t__', target = 'R_vs_PD'). Importance direction is inferred using a linear model of feature vs shap values. To account for model stochasticity, the procedure is repeated 1000x and averaged.

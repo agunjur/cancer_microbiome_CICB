@@ -3,7 +3,7 @@
 # Author: Ashray Gunjur
 
 # import packages
-import scipy, sklearn, imblearn, argparse, time, datetime, os, warnings
+import sklearn, imblearn, argparse, time, os, warnings
 import pandas as pd
 import numpy as np
 import itertools as it
@@ -31,20 +31,19 @@ args = parser.parse_args()
 
 # read in params (create_parameter_list.py MUST be run first)
 param_list = pd.read_csv("parameter_list.csv", index_col=0)
-feats, K = param_list[param_list.index==int(args.param_index)-1].values[0].tolist()
-target = "R_vs_P"
+feats, target, K = param_list[param_list.index==int(args.param_index)-1].values[0].tolist()
 
 # ------------------
 # create datasets
 # ------------------
 
 # import data
-df=pd.read_csv("supp_tables.xlsx", sheet_name = "metadata_and_clr_abundances")
+df=pd.read_excel("Supp_tables.xlsx", sheet_name = "metadata_and_clr_abundances")
 
 # if using a subset of top strains, this needs to be defined
 if K != "all":
     K = int(K)
-    top_taxa = pd.read_excel("supp_tables.xlsx", sheet_name = "6. strain_importance")
+    top_taxa = pd.read_excel("Supp_tables.xlsx", sheet_name = "strain_importance")
     top_taxa.columns = ["Strain","mean_importance_score","std_importance_score"]
 
     # reorder
@@ -135,20 +134,17 @@ cvdf = pd.DataFrame(cvdict)
 scores = cvdf.loc[cvdf['rank_test_score'] == 1]
 
 # add vars
-scores.loc[:,'feats'], scores.loc[:,'classifier'], scores.loc[:,'target'], scores.loc[:,'K'] = feats, classifier, target, K
+scores.loc[:,'feats'], scores.loc[:,'target'], scores.loc[:,'K'] = feats, target, K
 
 # ------------#
 # save data  #
 # ------------#
 
-# create project title
-project=f"hyperparams_{K}"
-
 # create new folder
-os.makedirs(f"{project}", exist_ok=True)
+os.makedirs("hyperparams", exist_ok=True)
 
 # create paths
-scores_path = f"{project}/hyperparams-feats_{feats}-K_{K}.csv"
+scores_path = f"hyperparams/hyperparams-feats_{feats}-target_{target}-K_{K}.csv"
 
 # save as csv
 scores.to_csv(scores_path)

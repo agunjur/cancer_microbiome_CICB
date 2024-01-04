@@ -29,21 +29,21 @@ from sklearn.metrics import roc_curve, roc_auc_score, auc, RocCurveDisplay
 
 # settings
 feats = '^t__'
-target = 'R_vs_P'
+target = 'R_vs_PD'
 
 # load data
-df=pd.read_excel("supp_tables_v2.xlsx", sheet_name = "metadata_and_clr_abundances")
+df=pd.read_excel("Supp_tables.xlsx", sheet_name = "metadata_and_clr_abundances")
 
 train = df.filter(regex='%s|%s' % (feats, target), axis =1).dropna()
 X = train.filter(regex='%s'% (feats), axis = 1)
 y = train[target].astype('bool').values
 
 # load hyperparams (from concatenating results of hyperparam_tuning.py, or pre-made in supp_tables.xlsx)
-hp_all = pd.read_excel("supp_tables_v2.xlsx", sheet_name = "hyperparam_tuning_all")
-string = hp_all[hp_all['feats']=='^t__']['params'].reset_index(drop=True)
+hp_all = pd.read_excel("Supp_tables.xlsx", sheet_name = "hyperparam_tuning_all")
+string = hp_all[(hp_all['feats']==feats) & (hp_all['target']==target)]['params'].reset_index(drop=True)
 hp = ast.literal_eval(string[0])
 
-# set up classifier:
+# set up classifier based on tuned hyperparameters
 clf = RandomForestClassifier(n_jobs=-1,
     n_estimators= hp['estimator__n_estimators'],
     max_features= hp['estimator__max_features'],
@@ -157,4 +157,4 @@ impscores_df['std_importance_score']=std_impscore
 impscores_df = impscores_df[['mean_importance_score','std_importance_score']]
 
 # save
-impscores_df.to_csv(f"feats-{feats}_importance.csv")
+impscores_df.to_csv(f"feats-{feats}_target-{target}_importance.csv")
